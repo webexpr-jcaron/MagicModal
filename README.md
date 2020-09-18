@@ -9,8 +9,10 @@ MagicModal est un plugin jQuery qui transforme une modal HTML statique en modal 
 ## 1. MagicModal d'ajout 
 
 ### Dans le fichier HTML
+- chaque élément possédant un attribut data-magic-* doit également posséder un attribut id unique.
 - la modal doit avoir **data-magic-type** à add.
-- la modal doit avoir **data-magic-recipient** égal à:
+- la modal doit avoir **data-magic-recipient** doit être égale à Library::NomDeLaLibrairieSharepoint::PositionDansLaLibrairie::ValeurDeLaColonneDocumentType. La Librairie doit posséder les colonnes **AccessibleName** (short string) et **DocumentType** (short string).
+    - Exemples:
     - 'Library::BNPPDocuments::Process::Procédure' => l'ajout se fera dans la librairie appelée "BNPPDocuments", dans son sous-dossier direct appelé "Process", et aura "Procédure" comme valeur dans la colonne DocumentType.
     - 'Library::BNPPDocuments::None::Procédure' => l'ajout se fera à la racine de la librairie "BNPPDocuments" (pas de sous-dossier).
     - 'Library::BNPPDocuments::/SousDossier1/SousDossier2/SousDossier3::Procédure': => l'ajout peut également se faire au degré de profondeur souhaité.
@@ -27,7 +29,7 @@ MagicModal est un plugin jQuery qui transforme une modal HTML statique en modal 
             
     <!-- @@ Le main file à upload -->
     <div>
-        <input type="file" id="procedure-parent-item-file"
+        <input type="file" id="procedureParentItemFile"
             data-magic-main-file 
             data-magic-btn="#btn-targetting-procedure-file">
         <button type="button" id="btn-targetting-procedure-file">
@@ -59,6 +61,17 @@ MagicModal est un plugin jQuery qui transforme une modal HTML statique en modal 
 
 ```js
     $('#modal-add-procedure').magicModal({
-        onAddDone: function() { location.reload() }
+        onAddDone: function( addData ) 
+        {
+            // On peut manipuler des données une fois l'ajout complètement terminé
+            console.log( addData );
+            
+            // Ou alors on peut ne pas se faire chier et simplement reload
+            location.reload()
+        }
     })
 ```
+
+### Côté back 
+
+![backend](https://zupimages.net/up/20/38/ia4o.png)
