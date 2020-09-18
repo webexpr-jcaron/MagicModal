@@ -2,63 +2,55 @@
 MagicModal est un plugin jQuery qui transforme une modal HTML statique en modal dynamique, connectée au back-end.
 
 ## Sommaire
-1. Fonctionnement global
-2. Exemple d'ajout de fichier
-3. Exemple d'ajout de fichier avec fichier secondaire
-4. Exemple d'édition de fichier
-5. Exemple d'édition de fichier avec fichier secondaire
-5. Exemple de suppression de fichier(s)
-6. Le trick pour gérer les liens
+1. MagicModal d'ajout
+2. MagicModal d'édition
+3. MagicModal de suppression
 
-## 1. Fonctionnement global
+## 1. MagicModal d'ajout 
 
 ### Dans le fichier HTML
+- la modal doit avoir **data-magic-type** à add.
+- la modal doit avoir **data-magic-recipient** égal à:
+    - 'Library::BNPPDocuments::Process::Procédure' => l'ajout se fera dans la librairie appelée "BNPPDocuments", dans son sous-dossier direct appelé "Process", et aura "Procédure" comme valeur dans la colonne DocumentType.
+    - 'Library::BNPPDocuments::None::Procédure' => l'ajout se fera à la racine de la librairie "BNPPDocuments" (pas de sous-dossier).
+    - 'Library::BNPPDocuments::/SousDossier1/SousDossier2/SousDossier3::Procédure': => l'ajout peut également se faire au degré de profondeur souhaité.
+- le fichier principal à ajouter doit avoir l'attribut vide **data-magic-main-file** et l'attribut **data-magic-btn** égal à #idDuBoutonAssocié.
+- les selects/input type text dont les valeurs doivent être enregistrées dans le back doivent posséder l'attribut **data-magic-col**, correspondant au nom de la colonne du recipient
+- le bouton de submit du formulaire doit avoir l'attribut vide **data-magic-submit**
 
 ```html
-<!-- @@ Add procedure modal -->
-<div class="modal theme-modal fade" id="modal-add-procedure"
-    data-magic-type="add"
-    data-magic-recipient="Library::BNPPDocuments::Process::Procédure"
+<!-- @@ Modal simplifiée par souci de lisibilité -->
+<div id="modal-add-procedure"
+     data-magic-type="add"
+     data-magic-recipient="Library::BNPPDocuments::Process::Procédure"
 >
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title h4">Ajouter une procédure</div>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    <i class="bac-close"></i>
-                </button>
-            </div>
-            <div class="form-group mb-0">
-                <input class="hidden-input" type="file" id="procedureParentItemFile"
-                    data-magic-main-file 
-                    data-magic-btn="#btn-targetting-procedure-file">
-                <button type="button" class="btn btn-dark btn-add-file btn-block file-name" id="btn-targetting-procedure-file">
-                    Cliquez ici pour ajouter un fichier
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <select class="is-select2" data-magic-col="ParentId" id="parent-cat-id">
-                        <option disabled selected value="0">Ajouter dans ...</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input id="procedureParentItemName" data-magic-col="Title" type="text" class="form-control" placeholder="Nom du fichier">
-                </div>
-                <div class="form-group">
-                    <input id="procedureParentItemReference" data-magic-col="Reference" type="text" class="form-control" placeholder="Référence (ex: RH-NP-3361)">
-                </div>
-                <div class="form-group">
-                    <textarea id="procedureParentItemDescription" data-magic-col="Description" class="form-control" rows="5" placeholder="Description"></textarea>
-                </div>
-                <div class="form-group">
-                    <input id="procedureParentItemLinkUrl" data-magic-col="Link" type="text" class="form-control is-link-field" placeholder="https://...">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="procedureParentItemSubmit" type="button" class="btn btn-primary" data-magic-submit>Ajouter</button>
-            </div>
-        </div>
+            
+    <!-- @@ Le main file à upload -->
+    <div>
+        <input type="file" id="procedure-parent-item-file"
+            data-magic-main-file 
+            data-magic-btn="#btn-targetting-procedure-file">
+        <button type="button" id="btn-targetting-procedure-file">
+            Cliquez ici pour ajouter un fichier
+        </button>
+    </div>
+
+    <!-- @@ Les informations à mettre dans les colonnes -->
+    <div>
+        <select class="is-select2" data-magic-col="ParentId" id="parent-cat-id"></select>
+
+        <input id="procedureParentItemName" data-magic-col="Title" type="text" placeholder="Nom du fichier">
+
+        <input id="procedureParentItemReference" data-magic-col="Reference" type="text" class="form-control" placeholder="Référence (ex: RH-NP-3361)">
+
+        <textarea id="procedureParentItemDescription" data-magic-col="Description" class="form-control" rows="5" placeholder="Description"></textarea>
+
+        <input id="procedureParentItemLinkUrl" data-magic-col="Link" type="text" class="form-control is-link-field" placeholder="https://...">
+    </div>
+
+    <!-- @@ Le bouton "Ajouter" -->
+    <div>
+        <button id="procedureParentItemSubmit" type="button" class="btn btn-primary" data-magic-submit>Ajouter</button>
     </div>
 </div>
 ```
