@@ -1,11 +1,18 @@
 # MagicModal
-jQuery plugin. Turns a static HTML modal into a dynamic modal linked to SharePoint's back-end.
+MagicModal est un plugin jQuery qui transforme une modal HTML statique en modal dynamique, connectée au back-end.
 
-## Fonctionnement global
+## Sommaire
+1. Fonctionnement global
+2. Exemple d'ajout de fichier
+3. Exemple d'ajout de fichier avec fichier secondaire
+4. Exemple d'édition de fichier
+5. Exemple d'édition de fichier avec fichier secondaire
+5. Exemple de suppression de fichier(s)
+6. Le trick pour gérer les liens
+
+## 1. Fonctionnement global
 
 ### Dans le fichier HTML
-
-### Dans le fichier JS
 
 ```html
 <!-- @@ Add procedure modal -->
@@ -54,4 +61,12 @@ jQuery plugin. Turns a static HTML modal into a dynamic modal linked to SharePoi
         </div>
     </div>
 </div>
+```
+
+### Dans le fichier JS
+
+```js
+    $('#modal-add-procedure').magicModal({
+        onAddDone: function() { location.reload() }
+    })
 ```
