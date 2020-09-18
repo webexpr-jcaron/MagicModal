@@ -1,6 +1,8 @@
 # MagicModal
 jQuery plugin. Turns a static HTML modal into a dynamic modal linked to SharePoint's back-end.
 
+![alt text](https://zupimages.net/up/20/38/lpvo.png)
+
 ```html
 <!-- @@ Add procedure modal -->
 <div class="modal theme-modal fade" id="modal-add-procedure"
