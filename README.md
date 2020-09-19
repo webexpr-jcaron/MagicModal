@@ -157,10 +157,10 @@ Le paramètre de la fonction de callback d'ajout, ici appelé "addData", contien
 ### Résultat côté back 
 
 Comme on a mis ici dans le **data-magic-recipient** la valeur Library::BNPPDocuments::Agreements::Accord, cela signifie que le call API a ajouté le fichier dans la librairie BNPPDocuments, dans le sous-dossier direct Agreements, avec le DocumentType mis à Accord.
-![backend](https://zupimages.net/up/20/38/8w9i.png)
+![backend](https://zupimages.net/up/20/38/dy1r.png)
 
 Pour le fichier secondaire, on a mis son **data-magic-secondary-recipient** à Library::BNPPDocuments::AgreementsExplicativeNotes::Note explicative. Il a donc atterri dans le sous-dossier direct AgreementsExplicativeNote. La colonne ParentId, renseignée via l'attribut data-magic-primary-key-col, a la valeur de l'ID du fichier principal.
-![backend](https://zupimages.net/up/20/38/hp5n.png)
+![backend](https://zupimages.net/up/20/38/bi1j.png)
 
 
 ## 2. MagicModal d'édition
