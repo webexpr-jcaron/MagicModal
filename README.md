@@ -7,17 +7,14 @@ MagicModal est un plugin jQuery qui transforme une modal HTML statique en modal 
     - Dans le fichier HTML
     - Dans le fichier JS
     - Côté back
-    - Cascade de causalités
 2. MagicModal d'édition
     - Dans le fichier HTML
     - Dans le fichier JS
     - Côté back
-    - Cascade de causalités
 3. MagicModal de suppression
     - Dans le fichier HTML
     - Dans le fichier JS
     - Côté back
-    - Cascade de causalités
 
 ## 0. Présentation
 
@@ -50,12 +47,20 @@ Un grand atout de MagicModal est qu'il permet l'**édition de fichier**, qui n'e
 - le fichier principal à ajouter doit avoir l'attribut vide **data-magic-main-file** et l'attribut **data-magic-btn** égal à #idDuBoutonAssocié.
 - les selects/input type text dont les valeurs doivent être enregistrées dans le back doivent posséder l'attribut **data-magic-col**, correspondant au nom de la colonne du recipient.
 - le bouton de submit du formulaire doit avoir l'attribut vide **data-magic-submit**.
+- pour ajouter un fichier secondaire, il faut ajouter un input type file dans la modal avec plusieurs attributs data-magic-*:
+    - **data-magic-optional**, pour le rendre "secondaire" et non bloquant pour le call API s'il n'est pas renseigné
+    - **data-magic-secondary-file**, pour préciser à MagicModal que c'est un fichier secondaire,
+    - **data-magic-primary-key-col**, pour indiquer le nom de la colonne dans son recipient qui prendra la valeur de l'ID du fichier principal,
+    - **data-magic-secondary-recipient**, pour indiquer son recipient dans le back, en suivant le même pattern que le data-magic-recipient
+    - **data-magic-btn**, pour indiquer quel élément trigger son click 
+
 
 ```html
+<!-- @@ data-magic-type, data-magic-recipient sur la modal -->
 <div class="modal theme-modal fade" 
     id="modal-add-document"
     data-magic-type="add"                                                                            
-    data-magic-recipient="Library::BNPPDocuments::Agreements::Accord">                               <!-- @@ data-magic-type, data-magic-recipient -->
+    data-magic-recipient="Library::BNPPDocuments::Agreements::Accord">                               
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -66,39 +71,46 @@ Un grand atout de MagicModal est qu'il permet l'**édition de fichier**, qui n'e
             </div>
             <div class="form-group mb-0">
                 <button type="button" class="btn btn-dark btn-add-file btn-block">
+                    <!-- data-magic-main-file, data-magic-btn sur l'input type file du fichier principal à envoyer -->
                     <input class="hidden-input" type="file" 
-                    id="add-agreement-file" data-magic-main-file data-magic-btn="#add-agreement-file-btn"> <!-- data-magic-main-file, data-magic-btn -->
+                    id="add-agreement-file" data-magic-main-file data-magic-btn="#add-agreement-file-btn"> 
                     <span class="file-name" id="add-agreement-file-btn">Cliquez ici pour ajouter un fichier</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                    <!-- data-magic-col sur un input type text => sa valeur ira dans la colonne Title -->
                     <input id="addDocumentName" type="text" class="form-control" placeholder="Nom du fichier"
-                    data-magic-col="Title">                                                                 <!-- data-magic-col => colonne Title -->
+                    data-magic-col="Title">                                                                 
                 </div>
                 <div class="form-group">
+                    <!-- data-magic-col sur un select select2 => sa valeur ira dans la colonne Company -->
                     <select id="addDocumentCompany" class="selectCompany form-control is-select2"
-                    data-magic-col="Company">                                                               <!-- data-magic-col => colonne Company -->
+                    data-magic-col="Company">                                                               
                         <option class="d-none" disabled="disabled" selected >Société</option>
                     </select>
                 </div>
                 <div class="form-group">
+                    <!-- data-magic-col sur un select select2 => sa valeur ira dans la colonne Topic -->
                     <select id="addDocumentTopic" class="selectTopic form-control is-select2"
-                    data-magic-col="Topic">                                                                 <!-- data-magic-col => colonne Topic -->
+                    data-magic-col="Topic">                                                                 
                         <option class="d-none" disabled="disabled" selected>Thématique</option>
                     </select>
                 </div>
+                <!-- data-magic-col sur un input type text => sa valeur ira dans la colonne Date -->
                 <div  class="form-group fg-date fc-shadow">
                     <input id="addDocumentDate" type="text" class="form-control" 
-                    data-magic-col="Date">                                                                  <!-- data-magic-col => colonne Date -->
+                    data-magic-col="Date">                                                                  
                 </div>
             </div>
             <div class="modal-footer">
+                <!-- data-magic-submit sur l'élément qui déclenche le call API au click -->
                 <button id="addAgreement" type="button" class="btn btn-primary" 
-                data-magic-submit>Ajouter</button>                                                          <!-- data-magic-submit -->
+                data-magic-submit>Ajouter</button>                                                          
             </div>
             <div class="modal-sub-footer">
                 <a href="javascript:void(0);" class="btn btn-secondary btn-block position-relative">
+                    <!-- pour ajouter un fichier secondaire, il lui faut pas mal d'attributs -->
                     <input type="file" class="hidden-input" 
                     id="quickNote" 
                     data-magic-secondary-file
@@ -106,9 +118,7 @@ Un grand atout de MagicModal est qu'il permet l'**édition de fichier**, qui n'e
                     data-magic-primary-key-col="ParentId"
                     data-magic-secondary-recipient="Library::BNPPDocuments::AgreementsExplicativeNotes::Note explicative"
                     data-magic-btn="#add-explicative-note-btn"                                             
-                >                                                                                          <!-- data-magic-optional, data-magic-secondary-file,
-                                                                                                                data-magic-primary-key-col,
-                                                                                                                data-magic-secondary-recipient, data-magic-btn -->
+                >                                                                                          
                     <span class="fa fa-info fai-circle rounded-circle align-middle"></span>
                     <span id="add-explicative-note-btn" class="file-name align-middle ml-1">Ajouter une note explicative</span>
                 </a>
@@ -155,4 +165,32 @@ Pour le fichier secondaire, on a mis son **data-magic-secondary-recipient** à L
 ![backend](https://zupimages.net/up/20/38/hp5n.png)
 
 
-### Cascades de causalités
+## 2. MagicModal d'édition
+
+### Dans le fichier HTML
+
+Lorem Ipsum.
+
+### Dans le fichier JS
+
+Lorem ipsum.
+
+### Côté back
+
+Lorem ipsum.
+
+
+## 3. MagicModal de suppression
+
+
+### Dans le fichier HTML
+
+Lorem Ipsum.
+
+### Dans le fichier JS
+
+Lorem ipsum.
+
+### Côté back
+
+Lorem ipsum.
