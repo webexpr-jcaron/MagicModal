@@ -335,7 +335,8 @@ Cependant, son fichier secondaire, édité également dans cet exemple, est mis 
 
 ### Dans le fichier JS
 
-Même chose: sélectionner la modal avec jQuery, puis jouer avec onDeleteDone pour indiquer quoi faire après les calls terminés.
+Il faut faire en sorte dans le code que la modal d'edit ait en .data("idToEdit") l'ID de l'item à éditer.
+Sélectionner la modal avec jQuery, puis jouer avec onDeleteDone pour indiquer quoi faire après les calls terminés.
 
 ```js
 $('#modal-confirm-delete-document').magicModal({
