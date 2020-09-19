@@ -120,6 +120,8 @@ Un grand atout de MagicModal est qu'il permet l'**édition de fichier**, qui n'e
 
 ### Dans le fichier JS
 
+Il suffit alors de sélectionner cette modal avec jQuery et lui appliquer la méthode .magicModal( paramètre ). Le paramètre est un objet, car j'avais prévu initialement de permettre plus d'options que ça, mais au final il n'y en a qu'une. C'est soit onAddDone, soit onEditDone, soit onDeleteDone à choisir de manière appropriée selon la modaL. 
+
 ```js
     $('#modal-add-procedure').magicModal({
         onAddDone: function( addData ) 
@@ -133,9 +135,24 @@ Un grand atout de MagicModal est qu'il permet l'**édition de fichier**, qui n'e
     })
 ```
 
-### Côté back 
+Le paramètre de la fonction de callback d'ajout, ici appelé "addData", contiendra toujours un objet de la forme suivante:
 
-![backend](https://zupimages.net/up/20/38/ia4o.png)
+```js
+    {
+        main: < données sur le fichier principal ajouté (data-magic-main-file) >,
+        idDuFichierSecondaire1: < données sur le fichier secondaire 1 (data-magic-secondary-file) >,
+        idDuFichierSecondaire2: < et ainsi de suite pour chaque fichier secondaire >
+    }
+```
+
+
+### Résultat côté back 
+
+Comme on a mis ici dans le **data-magic-recipient** la valeur Library::BNPPDocuments::Agreements::Accord, cela signifie que le call API a ajouté le fichier dans la librairie BNPPDocuments, dans le sous-dossier direct Agreements, avec le DocumentType mis à Accord.
+![backend](https://zupimages.net/up/20/38/8w9i.png)
+
+Pour le fichier secondaire, on a mis son **data-magic-secondary-recipient** à Library::BNPPDocuments::AgreementsExplicativeNotes::Note explicative. Il a donc atterri dans le sous-dossier direct AgreementsExplicativeNote. La colonne ParentId, renseignée via l'attribut data-magic-primary-key-col, a la valeur de l'ID du fichier principal.
+![backend](https://zupimages.net/up/20/38/hp5n.png)
 
 
 ### Cascades de causalités
