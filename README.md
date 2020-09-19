@@ -284,7 +284,7 @@ Cependant, si l'édition comprend une modification de fichier, il s'agit d'une �
 - sinon si (non trouvé dans le back ET input file non rempli) alors rien ne se passe #trempette
 - sinon alors le fichier secondaire est édit au niveau de sa clé primaire
 
-### Côté back
+### Résultat côté back
 
 En éditant le fichier ajouté dans l'exemple de 1. MagicModal d'ajout, on voit que son ID n'est plus le même car il a fallu supprimer la row puis en recréer une. 
 ![backend](https://zupimages.net/up/20/38/5qoc.png)
@@ -348,3 +348,7 @@ $('#modal-confirm-delete-document').magicModal({
     }
 });
 ```
+
+### Résultat côté back
+
+Le fichier principal est supprimé. Tous les fichiers secondaires ciblés avec la colonne ParentId égale à l'ID du fichier principal sont supprimés grâce à data-magic-also-update.
