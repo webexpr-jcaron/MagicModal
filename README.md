@@ -3,7 +3,7 @@ MagicModal est un plugin jQuery qui transforme une modal HTML statique en modal 
 
 ## Sommaire
 0. Présentation
-1. MagicModal d'ajout
+1. [MagicModal d'ajout](#0. Présentation)
     - Dans le fichier HTML
     - Dans le fichier JS
     - Côté back
@@ -271,7 +271,7 @@ $('#modal-edit-document').magicModal({
 })
 ```
 
-Au moment du call à l'API, il faut faire en sorte dans le code que la modal d'edit ait en .data("idToEdit") l'ID de l'item à éditer. Une autre subtilité vient du fait que le paramètre retourné diffère selon les tâches exécutées. En cas d'édition simple (modifications des colonnes, mais pas du fichier), editData aura la forme suivante:
+Une autre subtilité vient du fait que le paramètre retourné diffère selon les tâches exécutées. En cas d'édition simple (modifications des colonnes, mais pas du fichier), editData aura la forme suivante:
 
 ```js
 {
