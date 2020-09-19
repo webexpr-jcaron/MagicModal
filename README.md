@@ -3,7 +3,7 @@ MagicModal est un plugin jQuery qui transforme une modal HTML statique en modal 
 
 ## Sommaire
 0. Présentation
-1. [MagicModal d'ajout](#0. Présentation)
+1. [MagicModal d'ajout](#0-présentation)
     - Dans le fichier HTML
     - Dans le fichier JS
     - Côté back
