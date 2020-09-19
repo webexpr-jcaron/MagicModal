@@ -167,11 +167,112 @@ Pour le fichier secondaire, on a mis son **data-magic-secondary-recipient** à L
 
 ### Dans le fichier HTML
 
-Lorem Ipsum.
+```html
+<!-- @@ data-magic-type, data-magic-recipient sur la modal -->
+<div data-id="" document-path="" note-path=""  class="modal theme-modal fade" 
+id="modal-edit-document"
+data-magic-type="edit"
+data-magic-recipient="Library::BNPPDocuments::Agreements::Accord">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title h4">Editer</div>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="bac-close"></i>
+                </button>
+            </div>
+            <div class="form-group mb-0">
+                <!-- @@ data-magic-main-file, data-magic-btn sur l'input du fichier principal -->
+                <input class="hidden-input" type="file" 
+                id="agreementEditFile" data-magic-main-file data-magic-btn="#agreementEditFileBtn"> 
+                <button type="button" class="btn btn-dark btn-add-file btn-block" id="agreementEditFileBtn">
+                    Cliquez ici pour ajouter un fichier
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <!-- @@ data-magic-col sur un input type text => la valeur ira dans la colonne Title -->
+                    <input id="editDocumentName" type="text" class="form-control" placeholder="Nom du fichier"
+                            data-magic-col="Title">
+                </div>
+                <div class="form-group">
+                    <!-- @@ ira dans la colonne Company -->
+                    <select id="editDocumentCompany" class="selectCompany form-control is-select2"
+                            data-magic-col="Company">
+                        <option class="d-none" disabled="disabled" selected >Société</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <!-- @@ ira dans la colonne Topic -->
+                    <select id="editDocumentTopic" class="selectTopic form-control is-select2"
+                    data-magic-col="Topic">
+                        <option class="d-none" disabled="disabled" selected>Thématique</option>
+                    </select>
+                </div>
+                <div  class="form-group fg-date fc-shadow">
+                    <!-- @@ ira dans la colonne Date -->
+                    <input id="editDocumentDate" type="text" class="form-control" 
+                        data-magic-col="Date">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- @@ data-magic-redirect-confirm sur le bouton qui amène sur la modal de confirmation de suppression -->
+                <button id="deleteAgreement" type="button" class="btn btn-secondary" data-magic-redirect-confirm>Supprimer</button>
+                <!-- @@ data-magic-submit sur le bouton qui va générer les calls API -->
+                <button id="updateAgreement" type="button" class="btn btn-primary" data-magic-submit>Enregistrer</button>
+            </div>
+            <div class="modal-sub-footer">
+                <a id="addQuickNote" href="javascript:void(0);" class="btn btn-secondary btn-block position-relative">
+                    <!-- @@ si fichier secondaire -->
+                    <input type="file" class="hidden-input" id="quickNoteEditModal"
+                    data-magic-secondary-file
+                    data-magic-optional
+                    data-magic-primary-key-col="ParentId"
+                    data-magic-secondary-recipient="Library::BNPPDocuments::AgreementsExplicativeNotes::Note explicative"
+                    data-magic-btn="#edit-explicative-note-btn"
+                    >
+                    <span class="fa fa-info fai-circle rounded-circle align-middle"></span>
+                    <span class="file-name align-middle ml-1" id="edit-explicative-note-btn">Ajouter une note explicative</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+```
 
 ### Dans le fichier JS
 
-Lorem ipsum.
+On sélectionne la modal d'édition en jQuery, puis on lui applique la méthode magicModal en jouant avec onEditDone.
+
+```js
+$('#modal-edit-document').magicModal({
+    onEditDone: function( editData )
+    {
+        // Ce code s'exécute une fois l'édition complètement terminé, et on peut manipuler les données insérées via le paramètre
+        // Attention, le paramètre diffère selon édition simple ou complexe
+        // Typiquement, après une édition, on s'attend à voir la modification de l'élément édité dans le DOM
+        console.log( editData );
+    }
+})
+```
+
+La subtilité vient du fait que le paramètre retourné diffère selon les tâches exécutées. En cas d'édition simple (modifications des colonnes, mais pas du fichier), editData aura la forme suivante:
+
+```js
+{
+    main: < updatedItem de SharePoint >
+}
+```
+
+Cependant, si l'édition comprend une modification de fichier, il s'agit d'une édition complexe, c'est-à-dire d'une suppression totale de la row du fichier existant, suivie d'un rajout du nouveau fichier avec recopie des anciennes colonnes. Pour la recréation des colonnes, ce sont les éléments possédants les attributs data-magic-col qui sont collectés. La mise à jour des colonnes AccessibleName et DocumentType est automatique. En cas d'édition complexe, étant donné que c'est donc en réalité un ajout, le paramètre retourné est le même que celui de la magic modal d'ajout. Les données comprennent la propriété "addedItemID", correspondant à l'ID de la nouvelle row du back. 
+
+```js
+{
+    main: < données identiques à celles d'un ajout > 
+}
+```
+
+À noter que les fichiers secondaires suivent tous la même logique, on aura donc également les propriétés de chaque fichier secondaire édité, avec leurs données. 
 
 ### Côté back
 
