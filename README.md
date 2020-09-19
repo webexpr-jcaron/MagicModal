@@ -295,7 +295,11 @@ Cependant, si l'édition comprend une modification de fichier, il s'agit d'une �
 
 ### Côté back
 
-Lorem ipsum.
+En éditant le fichier ajouté dans l'exemple de 1. MagicModal d'ajout, on voit que son ID n'est plus le même car il a fallu supprimer la row puis en recréer une. 
+![backend](https://zupimages.net/up/20/38/5qoc.png)
+
+Cependant, son fichier secondaire est mise à jour pour concorder avec le nouvel ID.
+![backend](https://zupimages.net/up/20/38/wgiz.png)
 
 
 ## 3. MagicModal de suppression
