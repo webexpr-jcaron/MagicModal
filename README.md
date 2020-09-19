@@ -71,7 +71,7 @@ Un grand atout de MagicModal est qu'il permet l'**édition de fichier**, qui n'e
             </div>
             <div class="form-group mb-0">
                 <button type="button" class="btn btn-dark btn-add-file btn-block">
-                    <!-- data-magic-main-file, data-magic-btn sur l'input type file du fichier principal à envoyer -->
+                    <!-- @@ data-magic-main-file, data-magic-btn sur l'input type file du fichier principal à envoyer -->
                     <input class="hidden-input" type="file" 
                     id="add-agreement-file" data-magic-main-file data-magic-btn="#add-agreement-file-btn"> 
                     <span class="file-name" id="add-agreement-file-btn">Cliquez ici pour ajouter un fichier</span>
@@ -79,38 +79,38 @@ Un grand atout de MagicModal est qu'il permet l'**édition de fichier**, qui n'e
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <!-- data-magic-col sur un input type text => sa valeur ira dans la colonne Title -->
+                    <!-- @@ data-magic-col sur un input type text => sa valeur ira dans la colonne Title -->
                     <input id="addDocumentName" type="text" class="form-control" placeholder="Nom du fichier"
                     data-magic-col="Title">                                                                 
                 </div>
                 <div class="form-group">
-                    <!-- data-magic-col sur un select select2 => sa valeur ira dans la colonne Company -->
+                    <!-- @@ data-magic-col sur un select select2 => sa valeur ira dans la colonne Company -->
                     <select id="addDocumentCompany" class="selectCompany form-control is-select2"
                     data-magic-col="Company">                                                               
                         <option class="d-none" disabled="disabled" selected >Société</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <!-- data-magic-col sur un select select2 => sa valeur ira dans la colonne Topic -->
+                    <!-- @@ data-magic-col sur un select select2 => sa valeur ira dans la colonne Topic -->
                     <select id="addDocumentTopic" class="selectTopic form-control is-select2"
                     data-magic-col="Topic">                                                                 
                         <option class="d-none" disabled="disabled" selected>Thématique</option>
                     </select>
                 </div>
-                <!-- data-magic-col sur un input type text => sa valeur ira dans la colonne Date -->
+                <!-- @@ data-magic-col sur un input type text => sa valeur ira dans la colonne Date -->
                 <div  class="form-group fg-date fc-shadow">
                     <input id="addDocumentDate" type="text" class="form-control" 
                     data-magic-col="Date">                                                                  
                 </div>
             </div>
             <div class="modal-footer">
-                <!-- data-magic-submit sur l'élément qui déclenche le call API au click -->
+                <!-- @@ data-magic-submit sur l'élément qui déclenche le call API au click -->
                 <button id="addAgreement" type="button" class="btn btn-primary" 
                 data-magic-submit>Ajouter</button>                                                          
             </div>
             <div class="modal-sub-footer">
                 <a href="javascript:void(0);" class="btn btn-secondary btn-block position-relative">
-                    <!-- pour ajouter un fichier secondaire, il lui faut pas mal d'attributs -->
+                    <!-- @@ pour ajouter un fichier secondaire, il lui faut pas mal d'attributs -->
                     <input type="file" class="hidden-input" 
                     id="quickNote" 
                     data-magic-secondary-file
@@ -136,11 +136,9 @@ Il suffit alors de sélectionner cette modal avec jQuery et lui appliquer la mé
     $('#modal-add-procedure').magicModal({
         onAddDone: function( addData ) 
         {
-            // On peut manipuler des données une fois l'ajout complètement terminé
+            // Ce code s'exécute une fois l'ajout complètement terminé, et on peut manipuler les données insérées via le paramètre
+            // Typiquement, après un ajout, on s'attend à voir l'apparition d'un élément dans le DOM
             console.log( addData );
-            
-            // Ou alors on peut ne pas se faire chier et simplement reload
-            location.reload()
         }
     })
 ```
@@ -181,7 +179,6 @@ Lorem ipsum.
 
 
 ## 3. MagicModal de suppression
-
 
 ### Dans le fichier HTML
 
