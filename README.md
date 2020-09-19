@@ -298,7 +298,7 @@ Cependant, si l'édition comprend une modification de fichier, il s'agit d'une �
 En éditant le fichier ajouté dans l'exemple de 1. MagicModal d'ajout, on voit que son ID n'est plus le même car il a fallu supprimer la row puis en recréer une. 
 ![backend](https://zupimages.net/up/20/38/5qoc.png)
 
-Cependant, son fichier secondaire est mise à jour pour concorder avec le nouvel ID.
+Cependant, son fichier secondaire, édité également dans cet exemple, est mis à jour pour concorder avec le nouvel ID.
 ![backend](https://zupimages.net/up/20/38/wgiz.png)
 
 
@@ -306,12 +306,53 @@ Cependant, son fichier secondaire est mise à jour pour concorder avec le nouvel
 
 ### Dans le fichier HTML
 
-Lorem Ipsum.
+- chaque élément possédant un attribut data-magic-* doit également posséder un attribut id unique.
+- la modal doit avoir **data-magic-type** égal à delete.
+- la modal doit avoir **data-magic-recipient** égal à Library::NomDeLaLibrairie::SousDossier::ValeurDeDocumentType (voir 0. Présentation).
+- la modal doit avoir **data-magic-from** égal à #idDeLaModalEdit qui a engendré l'apparition de la modal de suppression
+- le bouton de retour en arrière doit avoir l'attribut vide **data-magic-go-back**.
+- le bouton de submit du formulaire doit avoir l'attribut vide **data-magic-submit**.
+- en cas de fichier secondaire à supprimer simultanément, il faut renseigner l'attribut **data-magic-also-delete** avec la valeur #idDuSecondaryFile.
+    
+```html
+<!-- @@ data-magic-type, data-magic-recipient, data-magic-from sur la modal -->
+<div class="modal theme-modal fade" 
+    id="modal-confirm-delete-document"
+    data-magic-type="delete"
+    data-magic-recipient="Library::BNPPDocuments::Agreements::Accord"
+    data-magic-from="#modal-edit-document">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title h4">Confirmer la suppression</div>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="bac-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">Cette action est irréversible.</div>
+            <div class="modal-footer">
+                <!-- @@ data-magic-go-back sur le bouton de retour, data-magic-also-delete et data-magic-submit sur le bouton de submit -->
+                <button type="button" class="btn btn-secondary" id="confirm-modal-go-back" data-magic-go-back>Retour</button>
+                <button type="button" class="btn btn-primary" id="confirm-modal-delete"
+                        data-magic-also-delete="#quickNote"
+                        data-magic-submit>Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+```
 
 ### Dans le fichier JS
 
-Lorem ipsum.
+Même chose: sélectionner la modal avec jQuery, puis jouer avec onDeleteDone pour indiquer quoi faire après les calls terminés.
 
-### Côté back
-
-Lorem ipsum.
+```js
+$('#modal-confirm-delete-document').magicModal({
+    onDeleteDone: function( deleteData )
+    {
+        // Ce code s'exécute une fois les calls de suppression complètement terminés, et on peut manipuler les données supprimées via le paramètre
+        // Typiquement, après une suppression, on s'attend à voir le retrait de l'élément du DOM
+        console.log( deleteData );
+    }
+});
+```
