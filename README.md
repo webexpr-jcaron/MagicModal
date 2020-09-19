@@ -167,6 +167,20 @@ Pour le fichier secondaire, on a mis son **data-magic-secondary-recipient** à L
 
 ### Dans le fichier HTML
 
+- chaque élément possédant un attribut data-magic-* doit également posséder un attribut id unique.
+- la modal doit avoir **data-magic-type** égal à edit.
+- la modal doit avoir **data-magic-recipient** égal à Library::NomDeLaLibrairie::SousDossier::ValeurDeDocumentType (voir 0. Présentation).
+- le fichier principal à éditer doit avoir l'attribut vide **data-magic-main-file** et l'attribut **data-magic-btn** égal à #idDuBoutonAssocié.
+- les selects/input type text dont les valeurs doivent être enregistrées dans le back doivent posséder l'attribut **data-magic-col**, correspondant au nom de la colonne du recipient.
+- Le bouton d'affichage de la modal de confirmation de suppression doit avoir l'attribut vide **data-magic-redirect-confirm**.
+- le bouton de submit du formulaire doit avoir l'attribut vide **data-magic-submit**.
+- pour éditer un fichier secondaire, il faut ajouter un input type file dans la modal avec plusieurs attributs data-magic-*:
+    - **data-magic-optional**, pour le rendre "secondaire" et non bloquant pour le call API s'il n'est pas renseigné
+    - **data-magic-secondary-file**, pour préciser à MagicModal que c'est un fichier secondaire,
+    - **data-magic-primary-key-col**, pour indiquer le nom de la colonne dans son recipient qui prendra la valeur de l'ID du fichier principal,
+    - **data-magic-secondary-recipient**, pour indiquer son recipient dans le back, en suivant le même pattern que le data-magic-recipient,
+    - **data-magic-btn**, pour indiquer quel élément trigger son click 
+    
 ```html
 <!-- @@ data-magic-type, data-magic-recipient sur la modal -->
 <div data-id="" document-path="" note-path=""  class="modal theme-modal fade" 
@@ -242,6 +256,7 @@ data-magic-recipient="Library::BNPPDocuments::Agreements::Accord">
 
 ### Dans le fichier JS
 
+Il faut faire en sorte dans le code que la modal d'edit ait en .data("idToEdit") l'ID de l'item à éditer.
 On sélectionne la modal d'édition en jQuery, puis on lui applique la méthode magicModal en jouant avec onEditDone.
 
 ```js
@@ -256,7 +271,7 @@ $('#modal-edit-document').magicModal({
 })
 ```
 
-La subtilité vient du fait que le paramètre retourné diffère selon les tâches exécutées. En cas d'édition simple (modifications des colonnes, mais pas du fichier), editData aura la forme suivante:
+Au moment du call à l'API, il faut faire en sorte dans le code que la modal d'edit ait en .data("idToEdit") l'ID de l'item à éditer. Une autre subtilité vient du fait que le paramètre retourné diffère selon les tâches exécutées. En cas d'édition simple (modifications des colonnes, mais pas du fichier), editData aura la forme suivante:
 
 ```js
 {
@@ -272,7 +287,11 @@ Cependant, si l'édition comprend une modification de fichier, il s'agit d'une �
 }
 ```
 
-À noter que les fichiers secondaires suivent tous la même logique, on aura donc également les propriétés de chaque fichier secondaire édité, avec leurs données. 
+À noter que les fichiers secondaires suivent tous la même logique, on aura donc également les propriétés de chaque fichier secondaire édité, avec leurs données. Le traitement des fichiers secondaires au moment des calls API est le suivant:
+- si (non trouvé dans le back ET input file rempli) alors ajout du file en fichier secondaire
+- sinon si (trouvé dans le back ET le bouton lié à l'input file a été remis à un texte comme "Ajouter un fichier") alors suppression du fichier secondaire
+- sinon si (non trouvé dans le back ET input file non rempli) alors rien ne se passe #trempette
+- sinon alors le fichier secondaire est édit au niveau de sa clé primaire
 
 ### Côté back
 
